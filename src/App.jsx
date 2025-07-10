@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import MovieList from "./MovieList";
 import Watchlist from "./Watchlist";
+import MovieDetailsPage from "./MovieDetailsPage";
 
 const WATCHLIST_KEY = "cinecache_watchlist";
 
@@ -38,12 +40,79 @@ const SUGGESTED_MOVIES = [
   }
 ];
 
+const MainPage = ({
+  view,
+  setView,
+  searchTerm,
+  setSearchTerm,
+  movies,
+  loading,
+  watchlist,
+  addToWatchlist,
+  removeFromWatchlist,
+  navigate
+}) => (
+  <div className="w-full max-w-2xl">
+    <div className="flex justify-between items-center mb-6">
+      <button
+        className="text-3xl font-bold hover:text-blue-400 transition cursor-pointer bg-transparent border-none p-0"
+        style={{ outline: "none" }}
+        onClick={() => {
+          setView("search");
+          setSearchTerm("");
+        }}
+        aria-label="Go to home"
+      >
+        CineCache
+      </button>
+      <button
+        className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 transition"
+        onClick={() => setView(view === "search" ? "watchlist" : "search")}
+      >
+        {view === "search" ? "Watchlist" : "Search"}
+      </button>
+    </div>
+    {view === "search" ? (
+      <>
+        <SearchBar value={searchTerm} onChange={setSearchTerm} />
+        {searchTerm.length < 3 ? (
+          <>
+            <h2 className="text-xl font-semibold mb-4">Suggestions</h2>
+            <MovieList
+              movies={SUGGESTED_MOVIES}
+              loading={false}
+              onAdd={addToWatchlist}
+              watchlist={watchlist}
+              onShowDetails={imdbID => navigate(`/movie/${imdbID}`)}
+            />
+          </>
+        ) : (
+          <MovieList
+            movies={movies}
+            loading={loading}
+            onAdd={addToWatchlist}
+            watchlist={watchlist}
+            onShowDetails={imdbID => navigate(`/movie/${imdbID}`)}
+          />
+        )}
+      </>
+    ) : (
+      <Watchlist
+        movies={watchlist}
+        onRemove={removeFromWatchlist}
+        onShowDetails={imdbID => navigate(`/movie/${imdbID}`)}
+      />
+    )}
+  </div>
+);
+
 const App = () => {
   const [view, setView] = useState("search");
   const [searchTerm, setSearchTerm] = useState("");
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [watchlist, setWatchlist] = useState([]);
+  const navigate = useNavigate();
 
   // Load watchlist from localStorage
   useEffect(() => {
@@ -89,55 +158,26 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-4">
-      <div className="w-full max-w-2xl">
-        <div className="flex justify-between items-center mb-6">
-          <button
-            className="text-3xl font-bold hover:text-blue-400 transition cursor-pointer bg-transparent border-none p-0"
-            style={{ outline: "none" }}
-            onClick={() => {
-              setView("search");
-              setSearchTerm("");
-            }}
-            aria-label="Go to home"
-          >
-            CineCache
-          </button>
-          <button
-            className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 transition"
-            onClick={() => setView(view === "search" ? "watchlist" : "search")}
-          >
-            {view === "search" ? "Watchlist" : "Search"}
-          </button>
-        </div>
-        {view === "search" ? (
-          <>
-            <SearchBar value={searchTerm} onChange={setSearchTerm} />
-            {searchTerm.length < 3 ? (
-              <>
-                <h2 className="text-xl font-semibold mb-4">Suggestions</h2>
-                <MovieList
-                  movies={SUGGESTED_MOVIES}
-                  loading={false}
-                  onAdd={addToWatchlist}
-                  watchlist={watchlist}
-                />
-              </>
-            ) : (
-              <MovieList
-                movies={movies}
-                loading={loading}
-                onAdd={addToWatchlist}
-                watchlist={watchlist}
-              />
-            )}
-          </>
-        ) : (
-          <Watchlist
-            movies={watchlist}
-            onRemove={removeFromWatchlist}
-          />
-        )}
-      </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MainPage
+              view={view}
+              setView={setView}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              movies={movies}
+              loading={loading}
+              watchlist={watchlist}
+              addToWatchlist={addToWatchlist}
+              removeFromWatchlist={removeFromWatchlist}
+              navigate={navigate}
+            />
+          }
+        />
+        <Route path="/movie/:imdbID" element={<MovieDetailsPage watchlist={watchlist} addToWatchlist={addToWatchlist} removeFromWatchlist={removeFromWatchlist} />} />
+      </Routes>
     </div>
   );
 };

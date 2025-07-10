@@ -1,0 +1,129 @@
+{
+  "nodes": [
+    {
+      "id": "app",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 400,
+      "height": 120,
+      "color": "#2563eb",
+      "text": "# App.jsx\n- Main state & logic\n- Routing\n- Holds: `view`, `searchTerm`, `movies`, `loading`, `watchlist`\n- Handles API fetch, localStorage, navigation"
+    },
+    {
+      "id": "mainpage",
+      "type": "text",
+      "x": 450,
+      "y": 0,
+      "width": 300,
+      "height": 100,
+      "color": "#38bdf8",
+      "text": "## MainPage (Home)\n- Search & Watchlist views\n- Passes props to children"
+    },
+    {
+      "id": "searchbar",
+      "type": "text",
+      "x": 900,
+      "y": 0,
+      "width": 200,
+      "height": 80,
+      "color": "#fbbf24",
+      "text": "### SearchBar.jsx\n- Controlled input\n- Updates `searchTerm`"
+    },
+    {
+      "id": "movielist",
+      "type": "text",
+      "x": 900,
+      "y": 120,
+      "width": 200,
+      "height": 80,
+      "color": "#fbbf24",
+      "text": "### MovieList.jsx\n- Shows movie cards\n- Props: `movies`, `loading`, `onAdd`, `watchlist`, `onShowDetails`"
+    },
+    {
+      "id": "moviecard",
+      "type": "text",
+      "x": 1200,
+      "y": 120,
+      "width": 200,
+      "height": 100,
+      "color": "#f87171",
+      "text": "### MovieCard.jsx\n- Shows poster, title, year\n- Add to Watchlist button\n- Click = go to details page"
+    },
+    {
+      "id": "watchlist",
+      "type": "text",
+      "x": 900,
+      "y": 250,
+      "width": 200,
+      "height": 80,
+      "color": "#fbbf24",
+      "text": "### Watchlist.jsx\n- Shows saved movies\n- Remove button\n- Click = go to details page"
+    },
+    {
+      "id": "moviedetailspage",
+      "type": "text",
+      "x": 1200,
+      "y": 0,
+      "width": 250,
+      "height": 120,
+      "color": "#34d399",
+      "text": "### MovieDetailsPage.jsx\n- Fetches full details by imdbID\n- Shows all info, add/remove watchlist\n- Back button"
+    },
+    {
+      "id": "api",
+      "type": "text",
+      "x": 1600,
+      "y": 60,
+      "width": 200,
+      "height": 80,
+      "color": "#a78bfa",
+      "text": "### OMDb API\n- Search: `s=...`\n- Details: `i=...`"
+    },
+    {
+      "id": "localstorage",
+      "type": "text",
+      "x": 0,
+      "y": 200,
+      "width": 250,
+      "height": 80,
+      "color": "#f472b6",
+      "text": "### localStorage\n- Persists `watchlist`"
+    },
+    {
+      "id": "state",
+      "type": "text",
+      "x": 0,
+      "y": 350,
+      "width": 350,
+      "height": 120,
+      "color": "#fde68a",
+      "text": "## State Variables\n- `view`: search/watchlist\n- `searchTerm`: string\n- `movies`: array\n- `loading`: bool\n- `watchlist`: array\n- (details page: `movie`, `loading`, `error`)"
+    },
+    {
+      "id": "router",
+      "type": "text",
+      "x": 450,
+      "y": 200,
+      "width": 300,
+      "height": 80,
+      "color": "#818cf8",
+      "text": "### React Router\n- `/` = MainPage\n- `/movie/:imdbID` = MovieDetailsPage"
+    }
+  ],
+  "edges": [
+    { "from": "app", "to": "mainpage", "color": "#2563eb" },
+    { "from": "mainpage", "to": "searchbar", "color": "#38bdf8" },
+    { "from": "mainpage", "to": "movielist", "color": "#38bdf8" },
+    { "from": "mainpage", "to": "watchlist", "color": "#38bdf8" },
+    { "from": "movielist", "to": "moviecard", "color": "#fbbf24" },
+    { "from": "watchlist", "to": "moviecard", "color": "#fbbf24" },
+    { "from": "moviecard", "to": "moviedetailspage", "color": "#f87171" },
+    { "from": "moviedetailspage", "to": "api", "color": "#34d399" },
+    { "from": "app", "to": "localstorage", "color": "#f472b6" },
+    { "from": "app", "to": "state", "color": "#fde68a" },
+    { "from": "app", "to": "router", "color": "#818cf8" },
+    { "from": "router", "to": "mainpage", "color": "#818cf8" },
+    { "from": "router", "to": "moviedetailspage", "color": "#818cf8" }
+  ]
+} 

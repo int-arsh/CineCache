@@ -1,7 +1,7 @@
 import React from "react";
 import MovieCard from "./MovieCard";
 
-const MovieList = ({ movies, loading, onAdd, watchlist }) => {
+const MovieList = ({ movies, loading, onAdd, watchlist, onShowDetails }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-10">
@@ -20,6 +20,7 @@ const MovieList = ({ movies, loading, onAdd, watchlist }) => {
           movie={movie}
           onAdd={onAdd}
           inWatchlist={watchlist.some((m) => m.imdbID === movie.imdbID)}
+          onShowDetails={onShowDetails}
         />
       ))}
     </div>
